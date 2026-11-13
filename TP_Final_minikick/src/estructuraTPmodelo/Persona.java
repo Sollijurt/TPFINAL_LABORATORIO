@@ -7,4 +7,9 @@ public class Persona {
 	private LocalDate fechaNacimiento;
 	private TipoSituacionLaboral tipo;
 	private String DNI;
+	public String getNombre() {
+		return nombre;
+	}
+	
+	
 }

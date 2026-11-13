@@ -102,12 +102,13 @@ public class DAO {
 	public void agregarPersonaPorParametro() {
 		Connection conexion = null;
 		
-		String sql = "INSERT INTO persona (nombre, dni)VALUES(?,?);";
+		String sql = "INSERT INTO persona (nombrePersona,fechaNacimientoPersona,tiposituacionlaborall )VALUES(?,?,?,?);";
 		try {
 			conexion = conectar();
 			PreparedStatement stmt = conexion.prepareStatement(sql);
 			stmt.setString(1, "");
-			stmt.setString(2, "");
+			//stmt.set
+			stmt.setString(3, "");
 		
 		 
 			System.out.println("se agrego");

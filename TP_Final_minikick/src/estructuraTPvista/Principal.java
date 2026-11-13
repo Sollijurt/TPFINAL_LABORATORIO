@@ -33,26 +33,21 @@ public class Principal extends JFrame {
 		});
 	}
 
-	JPanel panel = new JPanel();
+	private JPanel panel = new JPanel();
 	
 	//MENUS-----------
-	MenuInicio mInicio = new MenuInicio();
-	MenuComuna mComuna = new MenuComuna();
+	private MenuInicio mInicio = new MenuInicio();
+	private MenuComuna mComuna = new MenuComuna();
 	
 	//COMUNAS---------
-	ComunaAlta cAlta = new ComunaAlta();
-	ComunaConsultar cConsulta = new ComunaConsultar();
+	private ComunaAlta cAlta = new ComunaAlta();
+	private ComunaConsultar cConsulta = new ComunaConsultar();
 	
 	// BOTONES BARRA DE TAREAS--------------------
 	private JButton botonBarraComuna;
 	private JButton botonBarraBarrio;
 	private JButton botonBarraPersona;
 	private JButton botonBarraMenu;
-	
-	// BOTONES DEL MENU-----------------
-	private JButton botonComuna; 
-	private JButton botonBarrio;
-	private JButton botonPersona;
 	// BOTONES DEL MENU COMUNA ------------------
 	private JButton botonAltaComuna;
 	private JButton botonConsultaComuna;
@@ -85,6 +80,7 @@ public class Principal extends JFrame {
 		panel.add(mInicio, "MenuPrincipal");
 		panel.add(mComuna, "MenuComuna");
 		panel.add(cAlta, "AltaComuna");
+		panel.add(cConsulta, "ConsultaComuna");
 		
 		cl.show(panel, "MenuPrincipal");
 		
@@ -94,18 +90,6 @@ public class Principal extends JFrame {
 	}
 	
 	private void cargarBotonesMenuPrincipal() {
-		// BOTONES MENU PRINCIPAL- ----
-		botonComuna = new JButton("Comuna");
-		botonComuna.setBounds(135, 115, 106, 28);
-		mInicio.add(botonComuna);
-		
-		botonBarrio = new JButton("Barrio");
-		botonBarrio.setBounds(135, 165, 106, 28);
-		mInicio.add(botonBarrio);
-		
-		botonPersona = new JButton("Persona");
-		botonPersona.setBounds(135, 213, 106, 28);
-		mInicio.add(botonPersona);
 		
 		// TOOLBAR------------------------
 		botonBarraMenu = new JButton("Menu");
@@ -143,7 +127,7 @@ public class Principal extends JFrame {
 
 		botonConsultaComuna.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				cl.show(panel, "ConsultaComuna");
 			}
 		});
 	}
@@ -162,12 +146,6 @@ public class Principal extends JFrame {
 				cl.show(panel, "MenuComuna");
 			}
 		});
-		botonComuna.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cargarBotonesMenuComuna();
-				cl.show(panel, "MenuComuna");
-			}
-		});
 		
 		// BARRIO--------------------
 		botonBarraBarrio.addActionListener(new ActionListener() {
@@ -175,20 +153,11 @@ public class Principal extends JFrame {
 				cl.show(panel, "Mundo");
 			}
 		});
-		botonBarrio.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		
 		// PERSONA----------------
 		botonBarraPersona.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cl.show(panel, "PersonajeVisual");
-			}
-		});
-		
-		botonPersona.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
 			}
 		});
 	}
