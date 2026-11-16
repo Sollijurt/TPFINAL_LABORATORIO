@@ -25,6 +25,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 
 import estructuraDAO.DAO;
+import estructuraTP.Utilidades.Dialogo;
+
 import javax.swing.SpinnerNumberModel;
 
 public class ComunaAlta extends JPanel {
@@ -104,8 +106,8 @@ public class ComunaAlta extends JPanel {
 			Comuna comuna = new Comuna(textField.getText(), (int )spinner.getValue());
 			ArrayList<Integer> numeros = DAO.consultaMismoNumeroComuna();
 			
-			if(comuna.getNombre().isEmpty()) { //verificar si ponen un puto nombre
-				mostrarDialogo("Ingrese un nombre a la sede comunal");
+			if(comuna.getNombre().isEmpty()) { //verificar si ponen un puto nombr
+				Dialogo.mostrarDialogo("Ingrese un nombre a la sede comunal", ComunaAlta.this);
 			}else {
 				
 				System.out.println(comuna.getNombre());
@@ -114,25 +116,26 @@ public class ComunaAlta extends JPanel {
 					if(comuna.getNumeroComuna() != numeroOriginal) { // si no es igual, hay que verificar que no se parezca a otro
 						for(int n: numeros) {
 							if(n == comuna.getNumeroComuna()) { //si se parece a otro, no vale
-								mostrarDialogo("Numero de comuna ya existente, ponga otro o el anterior");
+								Dialogo.mostrarDialogo("Numero de comuna ya existente, ponga otro o el anterior", ComunaAlta.this);
 								aux =false;
 							}
 						}
 					}
 					if (aux == true) {
-						mostrarDialogo("Cargado con exito");
+						Dialogo.mostrarDialogo("Cargado con exito", ComunaAlta.this);
 						DAO.actualizarComuna(numeroOriginal +"", comuna); //el +"" es para hacerlo string de forma rapida
 					}
 				}
 				else {
 					for(int n: numeros) {
 						if(n == comuna.getNumeroComuna()) {
-							mostrarDialogo("Numero de comuna ya existente, ponga otro");
+							
+							Dialogo.mostrarDialogo("Numero de comuna ya existente, ponga otro", ComunaAlta.this);
 							aux = false;
 						}
 					}
 					if (aux == true) {
-						mostrarDialogo("Cargado con exito");
+						Dialogo.mostrarDialogo("Cargado con éxito", ComunaAlta.this);
 						DAO.agregarComuna(comuna);
 					}
 				}
@@ -141,21 +144,4 @@ public class ComunaAlta extends JPanel {
 		});
 	}
 	
-	private void mostrarDialogo(String mensaje) {
-        Window parentWindow = SwingUtilities.getWindowAncestor(this);
-
-        JDialog dialog = new JDialog(parentWindow, "Diálogo desde JPanel", Dialog.ModalityType.APPLICATION_MODAL);
-        dialog.setSize(300, 150);
-        dialog.setLocationRelativeTo(parentWindow);
-
-        JLabel lblMensaje = new JLabel(mensaje, SwingConstants.CENTER);
-        JButton btnCerrar = new JButton("Cerrar");
-        btnCerrar.addActionListener(e -> dialog.dispose());
-
-        dialog.getContentPane().setLayout(new BorderLayout());
-        dialog.getContentPane().add(lblMensaje, BorderLayout.CENTER);
-        dialog.getContentPane().add(btnCerrar, BorderLayout.SOUTH);
-
-        dialog.setVisible(true);
-    }
 }

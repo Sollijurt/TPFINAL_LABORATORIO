@@ -15,6 +15,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import estructuraDAO.DAO;
+import estructuraTP.Utilidades.Dialogo;
 import estructuraTPmodelo.Comuna;
 import estructuraTPmodelo.Barrios.Barrio;
 import estructuraTPmodelo.Barrios.ComplejoHabitacional;
@@ -121,12 +122,27 @@ public class ComunaConsultar extends JPanel {
 		// -------------- BUSCAR UNO.
 		botonBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ArrayList<Comuna> comunas = DAO.consultarComuna();
 				esUno = true;
-				Comuna c = DAO.consultarComunaPorNombre(textField.getText()) ;
+				Comuna c = null;
+				boolean salir = true;
+				int i = 0;
+				String nombreBuscado = textField.getText();
+				while(salir == true) {
+					if(comunas.get(i).getNombre().equals(nombreBuscado)) {
+						c = new Comuna(comunas.get(i).getNombre(), comunas.get(i).getNumeroComuna());
+						salir = false;
+						System.out.println(i);
+					}
+					i++;
+					if(i >= comunas.size()) {
+						salir =false;
+					}
+				}
 				if(c == null) {
-					mostrarDialogo("Comuna no encontrada"); // dialogo, podes poner el texto que queiras
+					Dialogo.mostrarDialogo("Comuna no encontrada", ComunaConsultar.this); // dialogo, podes poner el texto que queiras
 				}else {
-					mostrarDialogo("Comuna encontrada con exito");
+					Dialogo.mostrarDialogo("Comuna encontrada con exito", ComunaConsultar.this);
 					modelo.setRowCount(0); //borrar todo lo de la tabla (de forma visual) es como actualizarla
 					modelo.addRow(new Object[] {c.getNombre(), c.getNumeroComuna(), c.getcantidarBarrios()});
 				}
@@ -139,9 +155,7 @@ public class ComunaConsultar extends JPanel {
 				esUno = false;
 				modelo.setRowCount(0); //siempre actualizamos por si acaso
 				ArrayList<Comuna> comunas = DAO.consultarComuna();
-				for(Comuna c: comunas) {
-					modelo.addRow(new Object[] {c.getNombre(), c.getNumeroComuna(), c.getcantidarBarrios()});
-				}
+				mostrarDespuesDeAlgo();
 			}
 		});
 		//- -------------- VER DETALLE
@@ -149,12 +163,12 @@ public class ComunaConsultar extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				int fila = table.getSelectedRow();
 				if(fila < 0) {
-					mostrarDialogo("Seleccione una fila para borrar");
+					Dialogo.mostrarDialogo("Seleccione una fila para ver detalle", ComunaConsultar.this);
 				}else {
 					Comuna c = new Comuna(table.getValueAt(fila, 1).toString(), (int) table.getValueAt(fila, 2));
 					ArrayList<Barrio> b = DAO.consultarComunaDetalle(c.getNumeroComuna() + "");
 					
-					mostrarDialogoConTabla(c, b);
+					Dialogo.mostrarDialogoConTabla(c, b, ComunaConsultar.this);
 				}
 			}
 		});
@@ -164,12 +178,12 @@ public class ComunaConsultar extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				int fila = table.getSelectedRow();
 				if(fila <0 ) {
-					mostrarDialogo("Seleccione una fila para borrar");
+					Dialogo.mostrarDialogo("Seleccione una fila para borrar",ComunaConsultar.this);
 				}
 				else {
 					DAO.eliminarComuna(table.getValueAt(fila, 1).toString());
-					mostrarDialogo("Se elimino con éxito");
-					mostrarDespuesDeBorrar();
+					Dialogo.mostrarDialogo("Se elimino con éxito", ComunaConsultar.this);
+					mostrarDespuesDeAlgo();
 				}
 			}
 		});
@@ -185,12 +199,14 @@ public class ComunaConsultar extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				int fila = table.getSelectedRow();
 				if(fila <0 ) {
-					mostrarDialogo("Seleccione una fila para modificar");
+					Dialogo.mostrarDialogo("Seleccione una fila para modificar", ComunaConsultar.this);
 				}
 				else {
 					Comuna c = new Comuna(table.getValueAt(fila, 0).toString(), (int)table.getValueAt(fila, 1));
-					mostrarDialogConCargarPersonaje(c);
+					Dialogo.mostrarDialogConCargarComuna(c, ComunaConsultar.this);
+					mostrarDespuesDeAlgo();
 				}
+				
 			}
 		});
 	}
@@ -207,27 +223,8 @@ public class ComunaConsultar extends JPanel {
 		table.setModel(modelo);
 		scrollPane.setViewportView(table);
 	}
-	
-	private void mostrarDialogo(String mensaje) {
-        Window parentWindow = SwingUtilities.getWindowAncestor(this);
 
-        JDialog dialog = new JDialog(parentWindow, "Diálogo desde JPanel", Dialog.ModalityType.APPLICATION_MODAL);
-        dialog.setSize(300, 150);
-        dialog.setLocationRelativeTo(parentWindow);
-
-        JLabel lblMensaje = new JLabel(mensaje, SwingConstants.CENTER);
-        JButton btnCerrar = new JButton("Cerrar");
-        btnCerrar.addActionListener(e -> dialog.dispose());
-
-        dialog.getContentPane().setLayout(new BorderLayout());
-        dialog.getContentPane().add(lblMensaje, BorderLayout.CENTER);
-        dialog.getContentPane().add(btnCerrar, BorderLayout.SOUTH);
-
-        dialog.setVisible(true);
-    }
-	
-
-	private void mostrarDespuesDeBorrar() {
+	private void mostrarDespuesDeAlgo() {
 		// ------------- ACA SE USA EL UNO
 		if(esUno == true) {
 			modelo.setRowCount(0);
@@ -241,59 +238,7 @@ public class ComunaConsultar extends JPanel {
 		}
 	}
 	
-	private void mostrarDialogoConTabla(Comuna c,ArrayList<Barrio> b) {
-		Window parentWindow = SwingUtilities.getWindowAncestor(this);
-
-        JDialog dialog = new JDialog(parentWindow, "Diálogo desde JPanel", Dialog.ModalityType.APPLICATION_MODAL);
-        dialog.setSize(500, 500);
-        dialog.setLocationRelativeTo(parentWindow);
-        
-        JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(57, 170, 493, 261);
-		
-		Object[] columnas = new Object[] {"Nombre" , "Numero", "Barrio", "Tipo Barrio"};
-		DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
-		 
-        JTable tabla =  new JTable();
-		tabla.setDefaultEditor(Object.class, null);
-		tabla.setBounds(57, 122, 300, 112);
-		for(Barrio ba: b) {
-			if(ba instanceof TrazadoFormal) {
-				TrazadoFormal tz = (TrazadoFormal) ba;
-				modelo.addRow(new Object[] {c.getNombre(), c.getNumeroComuna(), tz.getNombre(), "Trazado Formal"});
-			}else if (ba instanceof UrbanizacionPlanificada) {
-				UrbanizacionPlanificada up = (UrbanizacionPlanificada) ba;
-				modelo.addRow(new Object[] {c.getNombre(), c.getNumeroComuna(), up.getNombre(), "Urbanizacion Planificada"});
-			}else if(ba instanceof ComplejoHabitacional) {
-				ComplejoHabitacional up = (ComplejoHabitacional) ba;
-				modelo.addRow(new Object[] {c.getNombre(), c.getNumeroComuna(), up.getNombre(), "Complejo habitacional"});
-			}
-			
-		}
-		
-		tabla.setModel(modelo);
-		scrollPane.setViewportView(tabla);
-        
-        JButton botonCerrar = new JButton("Cerrar");
-        botonCerrar.addActionListener(e -> dialog.dispose());
-
-        dialog.getContentPane().setLayout(new BorderLayout());
-        dialog.getContentPane().add(scrollPane, BorderLayout.CENTER);
-        dialog.getContentPane().add(botonCerrar, BorderLayout.SOUTH);
-
-        dialog.setVisible(true);
-	}
 	
-	private void mostrarDialogConCargarPersonaje(Comuna c) {
-		Window parentWindow = SwingUtilities.getWindowAncestor(this);
-
-        JDialog dialog = new JDialog(parentWindow, "Diálogo desde JPanel", Dialog.ModalityType.APPLICATION_MODAL);
-        ComunaAlta alta = new ComunaAlta(c.getNombre(), c.getNumeroComuna());
-        dialog.getContentPane().setLayout(new BorderLayout());
-        dialog.getContentPane().add(alta, BorderLayout.CENTER);
-        dialog.setSize(650, 650);
-        dialog.setLocationRelativeTo(parentWindow);
-        
-        dialog.setVisible(true);
-	}
+	
+	
 }

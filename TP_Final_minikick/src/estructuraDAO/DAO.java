@@ -167,38 +167,7 @@ public abstract class DAO {
 	}
 	
 	// consultar comuna especifica 
-	public static Comuna consultarComunaPorNombre(String nombreComuna)
-	{
-		String sql = "SELECT c.numeroComuna, c.nombreSedeComuna , (SELECT COUNT(*) FROM barrio b WHERE b.idComuna = c.idComuna) AS cantidadBarrios FROM comuna c WHERE nombreSedeComuna = ?; ";
-		//SANTY EN ESTE CASO TENGO QUE USAR ID YA QUE EN LA TABLA BARRIO ESTA EL ID DE COMUNA COMO FK, PODRIA UTILIZAR NUMEROCOMUNA PERO NO ESTA ESE CAMPO EN LA TABLA BARRIO
-		Connection conexion = null;
-		Comuna c = null;
-		
-		try {
-			conexion = conectar();
-			PreparedStatement stnt = conexion.prepareStatement(sql);
-		    stnt.setString(1, nombreComuna);
-		    ResultSet rs = stnt.executeQuery();	
-		    if (rs.next()) {
-		    	int numero = rs.getInt("numeroComuna");
-				String nombre = rs.getString("nombreSedeComuna");
-				int cantidad = rs.getInt("cantidadBarrios");
-				c = new Comuna(nombre,numero,cantidad);
-		    }
-			
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				conexion.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-		}
-		return c;
-	}
+	
 	//ELIMINAR COMUNAAAAA
 	public static void eliminarComuna(String numeroComuna)
 	{
