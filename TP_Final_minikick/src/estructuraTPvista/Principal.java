@@ -11,6 +11,10 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.border.EmptyBorder;
 
+import estructuraTPvista.Comuna.ComunaAlta;
+import estructuraTPvista.Comuna.ComunaConsultar;
+import estructuraTPvista.Comuna.MenuComuna;
+
 
 
 public class Principal extends JFrame {
@@ -61,7 +65,7 @@ public class Principal extends JFrame {
 		
 		//--------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(800, 400, 400, 400);
+		setBounds(600, 100, 800, 800);
 		contentPane = new JPanel();
 		
 		contentPane.setLayout(null);
@@ -72,7 +76,7 @@ public class Principal extends JFrame {
 		cargarBotonesMenuComuna(); //temporal para pruebas
 		usosBotonesComuna(); //temporal
 		
-		panel.setBounds(0, 38, 384, 323);
+		panel.setBounds(0, 38, 784, 723);
 		contentPane.add(panel);
 		panel.setLayout(cl);
 		
@@ -107,15 +111,15 @@ public class Principal extends JFrame {
 	
 	private void cargarBotonesMenuComuna() {
 		botonAltaComuna = new JButton("Cargar");
-		botonAltaComuna.setBounds(140, 115, 106, 28);
+		botonAltaComuna.setBounds(256, 230, 253, 117);
 		mComuna.add(botonAltaComuna);
 		
 		botonConsultaComuna = new JButton("Mostrar");
-		botonConsultaComuna.setBounds(140, 170, 106, 28);
+		botonConsultaComuna.setBounds(256, 434, 253, 117);
 		mComuna.add(botonConsultaComuna);
 	}
 	private void cargarBarraTareas() {
-		toolBar.setBounds(0, 0, 384, 41);
+		toolBar.setBounds(0, 0, 784, 41);
 		contentPane.add(toolBar);
 	}
 	private void usosBotonesComuna() {

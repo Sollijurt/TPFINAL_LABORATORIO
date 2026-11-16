@@ -3,6 +3,11 @@ package estructuraTPmodelo.Barrios;
 public class ComplejoHabitacional extends Barrio{
 	private int cantidadMonoblock;
 	private boolean tieneConsorcioAdministracion;
+	
+	public ComplejoHabitacional(String nombre) {
+		this.nombre = nombre;
+	}
+	
 	@Override
 	public float calculoDensidad() {
 		float aux = personas.size() / cantidadMonoblock;
@@ -15,6 +20,22 @@ public class ComplejoHabitacional extends Barrio{
 			aux = true;
 		}
 		return aux;
+	}
+	public String getNombre() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public float getSuperficie() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	public int getCantidadMonoblock() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	public boolean getTieneConsorcioAdministracion() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }

@@ -23,13 +23,13 @@ public class MenuInicio extends JPanel {
 		labelTitulo = new JLabel("Bienvenido al sistema");
 		labelTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 		labelTitulo.setFont(new Font("Tahoma", Font.PLAIN, 31));
-		labelTitulo.setBounds(47, 27, 300, 47);
+		labelTitulo.setBounds(231, 66, 300, 47);
 		add(labelTitulo);
 		
 		labelPregunta = new JLabel("Elija uno");
 		labelPregunta.setHorizontalAlignment(SwingConstants.CENTER);
 		labelPregunta.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		labelPregunta.setBounds(115, 85, 154, 20);
+		labelPregunta.setBounds(305, 124, 154, 20);
 		add(labelPregunta);
 		
 		
